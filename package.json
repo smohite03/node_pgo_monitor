@@ -1,0 +1,19 @@
+{
+  "name": "node_pgo_monitor",
+  "version": "1.0.0",
+  "description": "A Node application to get pgo updates from node and send updates to GCP Cloud Storage",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^7.1.0",
+    "axios": "^1.5.1",
+    "dotenv": "^16.3.1",
+    "node-cron": "^3.0.2"
+  }
+}
