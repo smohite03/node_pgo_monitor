@@ -28,7 +28,7 @@ const fetchData = async (fileName) => {
         fs.writeFileSync(fileName, response.data); // Save response data to a file
         logWithTimestamp(`Data from ${URL} saved to ${fileName}`);
     } catch (error) {
-        logWithTimestamp('Error:', error.message);
+        logWithTimestamp(`Error: ${error.message}`);
     }
 };
 
@@ -38,7 +38,7 @@ const uploadFileToBucket = async (fileName) => {
         await storage.bucket(BUCKET).upload(fileName); // Upload the file to the specified bucket
         logWithTimestamp(`Uploaded ${fileName} to ${BUCKET}`);
     } catch (error) {
-        logWithTimestamp('Error uploading file:', error.message);
+        logWithTimestamp(`Error uploading file: ${error.message}`);
         throw error;
     }
 };
@@ -53,7 +53,7 @@ const deleteFile = (fileName) => {
 const scheduleTasks = async () => {
     for (let i = 0; i < ITERATION; i++) {
         const randomMinutes = Math.floor(Math.random() * 10);
-        const cronExpression = `${randomMinutes} * * * *`;
+        const cronExpression = `*/${randomMinutes} * * * *`;
         logWithTimestamp(`Scheduling Jobs Minutes: ${randomMinutes}`);
         
         // Schedule a task using cron
@@ -65,7 +65,7 @@ const scheduleTasks = async () => {
                 await uploadFileToBucket(fileName); // Upload the file to GCS
                 deleteFile(fileName); // Delete the local file
             } catch (error) {
-                logWithTimestamp('Task failed:', error.message);
+                logWithTimestamp(`Task failed: ${error.message}`);
             }
         });
     }
