@@ -20,12 +20,6 @@ const logWithTimestamp = (message) => {
     console.log(`[${timestamp}] ${message}`);
 };
 
-// Schedule a cron job to run at 12 AM
-cron.schedule('0 0 * * *', () => {
-    console.log('Running generateRandomTimestamps at 12 AM...');
-    scheduleTasks(); // Execute the scheduleTasks function
-});
-
 // Function to make a request to the specified URL and save the data to a file
 const fetchData = async (fileName) => {
     const urlWithQuery = `${URL}?seconds=${DURATION}`;
@@ -58,10 +52,9 @@ const deleteFile = (fileName) => {
 // Schedule tasks at random times in a day
 const scheduleTasks = async () => {
     for (let i = 0; i < ITERATION; i++) {
-        const randomMinutes = Math.floor(Math.random() * 60);
-        const randomHours = Math.floor(Math.random() * 24);
-        const cronExpression = `${randomMinutes} ${randomHours} * * *`;
-        logWithTimestamp(`Scheduling Jobs Hours ${randomHours} : Minutes: ${randomMinutes}`);
+        const randomMinutes = Math.floor(Math.random() * 10);
+        const cronExpression = `${randomMinutes} * * * *`;
+        logWithTimestamp(`Scheduling Jobs Minutes: ${randomMinutes}`);
         
         // Schedule a task using cron
         cron.schedule(cronExpression, async () => {
@@ -77,6 +70,9 @@ const scheduleTasks = async () => {
         });
     }
 };
+
+// Schedule a cron job to run at 12 AM
+scheduleTasks();
 
 // Create an HTTP server
 const port = process.env.DEV_PORT || 8000;
