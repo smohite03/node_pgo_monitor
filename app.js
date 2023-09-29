@@ -21,7 +21,7 @@ const logWithTimestamp = (message) => {
 };
 
 // Schedule a cron job to run at 12 AM
-cron.schedule('0 0 * * *', () => {
+cron.schedule('25 15 * * *', () => {
     console.log('Running generateRandomTimestamps at 12 AM...');
     scheduleTasks(); // Execute the scheduleTasks function
 });
@@ -34,7 +34,7 @@ const fetchData = async (fileName) => {
         fs.writeFileSync(fileName, response.data); // Save response data to a file
         logWithTimestamp(`Data from ${URL} saved to ${fileName}`);
     } catch (error) {
-        logWithTimestamp('Error:', error.message);
+        logWithTimestamp(`Error: ${error.message}`);
     }
 };
 
@@ -44,7 +44,7 @@ const uploadFileToBucket = async (fileName) => {
         await storage.bucket(BUCKET).upload(fileName); // Upload the file to the specified bucket
         logWithTimestamp(`Uploaded ${fileName} to ${BUCKET}`);
     } catch (error) {
-        logWithTimestamp('Error uploading file:', error.message);
+        logWithTimestamp(`Error Uploading File: ${error.message}`);
         throw error;
     }
 };
@@ -72,7 +72,7 @@ const scheduleTasks = async () => {
                 await uploadFileToBucket(fileName); // Upload the file to GCS
                 deleteFile(fileName); // Delete the local file
             } catch (error) {
-                logWithTimestamp('Task failed:', error.message);
+                logWithTimestamp(`Task Failed: ${error.message}`);
             }
         });
     }
