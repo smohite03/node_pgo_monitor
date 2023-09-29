@@ -21,7 +21,7 @@ const logWithTimestamp = (message) => {
 };
 
 // Schedule a cron job to run at 12 AM
-cron.schedule('25 15 * * *', () => {
+cron.schedule('0 0 * * *', () => {
     console.log('Running generateRandomTimestamps at 12 AM...');
     scheduleTasks(); // Execute the scheduleTasks function
 });
@@ -60,7 +60,7 @@ const scheduleTasks = async () => {
     for (let i = 0; i < ITERATION; i++) {
         const randomMinutes = Math.floor(Math.random() * 60);
         const randomHours = Math.floor(Math.random() * 24);
-        const cronExpression = `${randomMinutes} ${randomHours} * * *`;
+        const cronExpression = `*/${randomMinutes} ${randomHours} * * *`;
         logWithTimestamp(`Scheduling Jobs Hours ${randomHours} : Minutes: ${randomMinutes}`);
         
         // Schedule a task using cron
