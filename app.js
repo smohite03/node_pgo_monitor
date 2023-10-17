@@ -40,8 +40,14 @@ const fetchData = async (fileName) => {
 
 // Function to upload a file to Google Cloud Storage
 const uploadFileToBucket = async (fileName) => {
+    const folderName = process.env.ENV; // Specify the folder name
+    const destination = `ENV:${folderName}/${fileName}`;
+
     try {
-        await storage.bucket(BUCKET).upload(fileName); // Upload the file to the specified bucket
+        // Upload the file to the specified bucket
+        await storage.bucket(BUCKET).upload(fileName, {
+            destination, // Set the destination to include the folder
+        }); 
         logWithTimestamp(`Uploaded ${fileName} to ${BUCKET}`);
     } catch (error) {
         logWithTimestamp(`Error Uploading File: ${error.message}`);
