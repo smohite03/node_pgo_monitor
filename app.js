@@ -20,12 +20,6 @@ const logWithTimestamp = (message) => {
     console.log(`[${timestamp}] ${message}`);
 };
 
-// Schedule a cron job to run at 12 AM
-cron.schedule('0 0 * * *', () => {
-    console.log('Running generateRandomTimestamps at 12 AM...');
-    scheduleTasks(); // Execute the scheduleTasks function
-});
-
 // Function to make a request to the specified URL and save the data to a file
 const fetchData = async (fileName) => {
     const urlWithQuery = `${URL}?seconds=${DURATION}`;
@@ -34,7 +28,7 @@ const fetchData = async (fileName) => {
         fs.writeFileSync(fileName, response.data); // Save response data to a file
         logWithTimestamp(`Data from ${URL} saved to ${fileName}`);
     } catch (error) {
-        logWithTimestamp(`Error: ${error.message}`);
+        logWithTimestamp(`Error: ${error.message} Perhaps the route is incorrect, or the server is down and unable to get data.`);
     }
 };
 
@@ -42,7 +36,6 @@ const fetchData = async (fileName) => {
 const uploadFileToBucket = async (fileName) => {
     const folderName = process.env.ENV; // Specify the folder name
     const destination = `ENV:${folderName}/${fileName}`;
-
     try {
         // Upload the file to the specified bucket
         await storage.bucket(BUCKET).upload(fileName, {
@@ -66,8 +59,12 @@ const scheduleTasks = async () => {
     for (let i = 0; i < ITERATION; i++) {
         const randomMinutes = Math.floor(Math.random() * 60);
         const randomHours = Math.floor(Math.random() * 24);
-        const cronExpression = `*/${randomMinutes} ${randomHours} * * *`;
-        logWithTimestamp(`Scheduling Jobs Hours ${randomHours} : Minutes: ${randomMinutes}`);
+        const currentDate = new Date();
+        const currentDay = currentDate.getDate();
+        const currentMonth = currentDate.getMonth() + 1;
+
+        const cronExpression = `*/${randomMinutes} ${randomHours} ${currentDay} ${currentMonth} *`;
+        logWithTimestamp(`Scheduling Job At Hours ${randomHours} : Minutes: ${randomMinutes} : Day: ${currentDay} : Month ${currentMonth}`);
         
         // Schedule a task using cron
         cron.schedule(cronExpression, async () => {
@@ -83,6 +80,8 @@ const scheduleTasks = async () => {
         });
     }
 };
+
+scheduleTasks();
 
 // Create an HTTP server
 const port = process.env.DEV_PORT || 8000;
