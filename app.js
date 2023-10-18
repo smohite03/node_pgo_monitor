@@ -22,7 +22,7 @@ const storage = new Storage();
 
 // Function to log messages with timestamps
 const logWithTimestamp = (message) => {
-    const timestamp = new Date().toISOString();
+    const timestamp = new Date();
     console.log(`[${timestamp}] ${message}`);
 };
 
@@ -69,11 +69,12 @@ const scheduleTasks = async () => {
         const currentDay = currentDate.getDate();
         const currentMonth = currentDate.getMonth() + 1;
 
-        const cronExpression = `${randomMinutes} ${randomHours} ${currentDay} ${currentMonth} *`;
+        let cronExpression = `${randomMinutes} ${randomHours} ${currentDay} ${currentMonth} *`;
         logWithTimestamp(`Scheduling Job At Hours ${randomHours} : Minutes: ${randomMinutes} : Day: ${currentDay} : Month ${currentMonth}`);
         
         // Schedule a task using cron
         cron.schedule(cronExpression, async () => {
+            logWithTimestamp(`Starting Scrapping Job`);
             const currentTimestamp = Date.now();
             const fileName = `${SERVICE}-${currentTimestamp}.pprof`;
             try {
