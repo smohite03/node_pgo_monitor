@@ -69,7 +69,7 @@ const scheduleTasks = async () => {
         const currentDay = currentDate.getDate();
         const currentMonth = currentDate.getMonth() + 1;
 
-        const cronExpression = `*/${randomMinutes} ${randomHours} ${currentDay} ${currentMonth} *`;
+        const cronExpression = `${randomMinutes} ${randomHours} ${currentDay} ${currentMonth} *`;
         logWithTimestamp(`Scheduling Job At Hours ${randomHours} : Minutes: ${randomMinutes} : Day: ${currentDay} : Month ${currentMonth}`);
         
         // Schedule a task using cron
