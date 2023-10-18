@@ -14,6 +14,12 @@ DURATION = DURATION || 30;
 // Initialize Google Cloud Storage client
 const storage = new Storage();
 
+// Schedule a cron job to run at 12 AM
+// cron.schedule('0 0 * * *', () => {
+//     console.log('Running generateRandomTimestamps at 12 AM...');
+//     scheduleTasks(); // Execute the scheduleTasks function
+// });
+
 // Function to log messages with timestamps
 const logWithTimestamp = (message) => {
     const timestamp = new Date().toISOString();
@@ -35,7 +41,7 @@ const fetchData = async (fileName) => {
 // Function to upload a file to Google Cloud Storage
 const uploadFileToBucket = async (fileName) => {
     const folderName = process.env.ENV; // Specify the folder name
-    const destination = `ENV:${folderName}/${fileName}`;
+    const destination = `${folderName}/${fileName}`;
     try {
         // Upload the file to the specified bucket
         await storage.bucket(BUCKET).upload(fileName, {
