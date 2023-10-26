@@ -9,13 +9,18 @@ dotenv.config(); // Load environment variables from a .env file
 
 // Load environment variables from the .env file
 let { URL, SERVICE, DURATION, ITERATION, BUCKET } = process.env;
+if (!URL || !SERVICE || !DURATION || !BUCKET) {
+    console.error('Missing required environment variables.');
+    process.exit(1);
+}
+
 ITERATION = ITERATION || 10;
 DURATION = DURATION || 30;
 // Initialize Google Cloud Storage client
 const storage = new Storage();
 
 // Schedule a cron job to run at 12 AM
-// cron.schedule('0 0 * * *', () => {
+// cron.schedule('2 0 * * *', () => {
 //     console.log('Running generateRandomTimestamps at 12 AM...');
 //     scheduleTasks(); // Execute the scheduleTasks function
 // });
@@ -41,7 +46,8 @@ const fetchData = async (fileName) => {
 // Function to upload a file to Google Cloud Storage
 const uploadFileToBucket = async (fileName) => {
     const folderName = process.env.ENV; // Specify the folder name
-    const destination = `${folderName}/${fileName}`;
+    let currentDate = new Date().toJSON().slice(0, 10);
+    const destination = `${folderName}/${currentDate}/${fileName}`;
     try {
         // Upload the file to the specified bucket
         await storage.bucket(BUCKET).upload(fileName, {
