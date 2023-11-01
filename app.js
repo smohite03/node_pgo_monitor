@@ -20,10 +20,10 @@ DURATION = DURATION || 30;
 const storage = new Storage();
 
 // Schedule a cron job to run at 12 AM
-// cron.schedule('2 0 * * *', () => {
-//     console.log('Running generateRandomTimestamps at 12 AM...');
-//     scheduleTasks(); // Execute the scheduleTasks function
-// });
+cron.schedule('2 0 * * *', () => {
+    console.log('Running generateRandomTimestamps at 12 AM...');
+    scheduleTasks(); // Execute the scheduleTasks function
+});
 
 // Function to log messages with timestamps
 const logWithTimestamp = (message) => {
@@ -93,8 +93,6 @@ const scheduleTasks = async () => {
         });
     }
 };
-
-scheduleTasks();
 
 // Create an HTTP server
 const port = process.env.DEV_PORT || 8000;
